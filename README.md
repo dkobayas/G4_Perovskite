@@ -3,7 +3,7 @@ Geant4 simulation package for development of perovskite semiconductor radiation 
 
 == Quick Start Guide ==
 
-= First of all, please clone this repository via git clone command;
+= First of all, please clone this repository via git clone command;//
   $ git clone https://github.com/dkobayas/G4_Perovskite.git
     * you have to be registered as the github user.
 
