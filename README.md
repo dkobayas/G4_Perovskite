@@ -5,7 +5,7 @@ Geant4 simulation package for development of perovskite semiconductor radiation 
 
 #### First of all, please clone this repository via git clone command;
 
-  $ git clone https://github.com/dkobayas/G4_Perovskite.git
+  `$ git clone https://github.com/dkobayas/G4_Perovskite.git`
 
   note: you have to be registered as the github user.
 
@@ -13,9 +13,9 @@ Geant4 simulation package for development of perovskite semiconductor radiation 
 
   Let's move into this directory and make a new directory for built process.
 
-  $ cd G4_Perovskite
+  `$ cd G4_Perovskite`
 
-  $ mkdir built
+  `$ mkdir built`
 
   Plase move to the built directory, and copy Mkaefile from G4Pvsk to built
 
@@ -35,17 +35,17 @@ Geant4 simulation package for development of perovskite semiconductor radiation 
 
 #### Now, you can compile this package.
   
-  $ make
+  `$ make`
   
   You can find and execute the executable file, G4Pvsk.
   
   Please copy run1.mac(one of run macros) from G4Pvsk to built.
   
-  $ cp ../G4Pvsk/run1.mac .
+  `$ cp ../G4Pvsk/run1.mac .`
   
   Finally, please execute with this run macro.
   
-  $ ./G4Pvsk run1.mac
+  `$ ./G4Pvsk run1.mac`
   
   I hope you can find the processing lines, and the result output as root file, Perovskite.root.
   
