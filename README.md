@@ -11,33 +11,21 @@ Geant4 simulation package for development of perovskite semiconductor radiation 
 
 #### Then, you can find the base directory, G4_Perovskite.
 
-  Let's move into this directory and make a new directory for built process.
+  Please move into the directory.
 
-  `$ cd G4_Perovskite`
+  `$ cd G4Pvsk`
 
-  `$ mkdir built`
-  
-  `$ cd built`
+  You can run the cmake command, and find the Makefile generated with your environment.
 
-  Plase move to the built directory, and copy Mkaefile from G4Pvsk to built
-
-  $ cp ../G4Pvsk/CMakeList.txt .
+  `$ cmake .`
 
 #### Now, you can compile this package.
-  
-  `$ cmake .`
-  
-  Then, you can find generated Makefile built for your environment.
   
   Please do make
   
   `$ make`
   
   You can find and execute the executable file, G4Pvsk.
-  
-  Please copy run1.mac(one of run macros) from G4Pvsk to built.
-  
-  `$ cp ../G4Pvsk/run1.mac .`
   
   Finally, please execute with this run macro.
   
