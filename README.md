@@ -16,24 +16,20 @@ Geant4 simulation package for development of perovskite semiconductor radiation 
   `$ cd G4_Perovskite`
 
   `$ mkdir built`
+  
+  `$ cd built`
 
   Plase move to the built directory, and copy Mkaefile from G4Pvsk to built
 
-  $ cp ../G4Pvsk/Makefile .
-  
-#### You have to modify the working directory path in Makefile.
-
-  Please open and modify the Mkaefile as bellow:
-    
-    # The top-level source directory on which CMake was run.
-    CMAKE_SOURCE_DIR = /Path/to/Installed/Directory/G4_Perovskite/G4Pvsk
-
-    # The top-level build directory on which CMake was run.
-    CMAKE_BINARY_DIR = /Path/to/Installed/Directory/G4_Perovskite/build
-
-    note: /Path/to/Installed/Directory should be replaced by the path following your situation.
+  $ cp ../G4Pvsk/CMakeList.txt .
 
 #### Now, you can compile this package.
+  
+  `$ cmake .`
+  
+  Then, you can find generated Makefile built for your environment.
+  
+  Please do make
   
   `$ make`
   
