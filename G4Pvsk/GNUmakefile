@@ -1,18 +1,21 @@
-# -----------------------------------------------------------------
+# --------------------------------------------------------------
+# GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
+# --------------------------------------------------------------
 
-SUBDIR =  B4a B4b B4c B4d
+name := G4Pvsk
+G4TARGET := $(name)
+G4EXLIB := true
 
-.PHONY: bin clean clean_bin debug
+ifndef G4INSTALL
+  G4INSTALL = ../../..
+endif
 
-bin:
-	@for dir in $(SUBDIR); do (cd $$dir && $(MAKE) bin); done;:
- 
-clean:
-	@for dir in $(SUBDIR); do (cd $$dir && $(MAKE) clean); done;:
- 
-clean_bin:
-	@for dir in $(SUBDIR); do (cd $$dir && $(MAKE) clean_bin); done;:
- 
-debug:
-	@for dir in $(SUBDIR); do (cd $$dir && $(MAKE) debug); done;:
- 
+.PHONY: all
+all: lib bin
+
+include $(G4INSTALL)/config/binmake.gmk
+
+visclean:
+	rm -f g4*.prim g4*.eps g4*.wrl
+	rm -f .DAWN_*
+
