@@ -5,7 +5,8 @@
 # Use these open statements to open selected visualization
 #
 # Use this open statement to create an OpenGL view:
-/vis/open OGL 600x600-0+0
+###/vis/open OGL 600x600-0+0
+/vis/open OGLIX
 #
 # Use this open statement to create an OpenInventor view:
 #/vis/open OI
@@ -73,7 +74,8 @@
 # Name
 /vis/set/textColour green
 /vis/set/textLayout right
-/vis/scene/add/text2D 0.9 -.9 24 ! ! exampleB1
+###/vis/scene/add/text2D 0.9 -.9 24 ! ! exampleB1
+/vis/scene/add/text2D 0.9 -.9 24 ! ! G4Pvskt
 # or, if your system does not support right-adjustment
 #/vis/scene/add/text2D 0 -.9 24 ! ! exampleB1
 /vis/set/textLayout    # Revert to normal (left adjusted) layout
@@ -113,4 +115,4 @@
 /vis/verbose warnings
 #
 # For file-based drivers, use this to create an empty detector view:
-#/vis/viewer/flush
+/vis/viewer/flush
