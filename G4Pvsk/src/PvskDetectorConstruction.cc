@@ -142,67 +142,188 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
   G4Element* elBr  = new G4Element("Br", "Br" , 35., a);
   //G4double density = 16.3*g/cm3;
   G4double density = 4*g/cm3;
-  G4Material* MAPbI3 = new G4Material("MAPbI3", density, 5);
-  G4Material* CsPbBr3 = new G4Material("CsPbBr3", density, 3);
   //
   // 1 single cristal
   //
+  // MAPbI3
+  G4Material* MAPbI3 = new G4Material("MAPbI3", density, 5);
   MAPbI3->AddElement(elC , 1);
   MAPbI3->AddElement(elH , 6);
   MAPbI3->AddElement(elN , 1);
   MAPbI3->AddElement(elPb , 1);
   MAPbI3->AddElement(elI , 3);
-  G4double MAPbI3_dxa = 6*mm, MAPbI3_dxb = 6*mm;
-  G4double MAPbI3_dya = 6*mm, MAPbI3_dyb = 6*mm;
-  G4double MAPbI3_dz  = 2*mm;      
+  G4double MAPbI3_dx = 2*mm;
+  G4double MAPbI3_dy = 6*mm;
+  G4double MAPbI3_dz = 6*mm;      
   G4Trd* solidShapeMAPbI3 =    
     new G4Trd("ShapeMAPbI3",                      //its name
-              0.5*MAPbI3_dxa, 0.5*MAPbI3_dxb, 
-              0.5*MAPbI3_dya, 0.5*MAPbI3_dyb, 0.5*MAPbI3_dz); //its size
+              0.5*MAPbI3_dx, 0.5*MAPbI3_dx, 
+              0.5*MAPbI3_dy, 0.5*MAPbI3_dy, MAPbI3_dz); //its size
+  // MAPbI3
+  G4Material* MAPbBr3 = new G4Material("MAPbBr3", density, 5);
+  MAPbBr3->AddElement(elC , 1);
+  MAPbBr3->AddElement(elH , 6);
+  MAPbBr3->AddElement(elN , 1);
+  MAPbBr3->AddElement(elPb , 1);
+  MAPbBr3->AddElement(elBr , 3);
+  G4double MAPbBr3_dx = 2*mm;
+  G4double MAPbBr3_dy = 6*mm;
+  G4double MAPbBr3_dz = 6*mm;      
+  G4Trd* solidShapeMAPbBr3 =    
+    new G4Trd("ShapeMAPbBr3",                      //its name
+              0.5*MAPbBr3_dx, 0.5*MAPbBr3_dx, 
+              0.5*MAPbBr3_dy, 0.5*MAPbBr3_dy, MAPbBr3_dz); //its size
+  // CsPbBr3
+  G4Material* CsPbBr3 = new G4Material("CsPbBr3", density, 3);
   CsPbBr3->AddElement(elCs, 1);
   CsPbBr3->AddElement(elPb, 1);
   CsPbBr3->AddElement(elBr, 3);
-  G4double CsPbBr3_dxa = 6*mm, CsPbBr3_dxb = 6*mm;
-  G4double CsPbBr3_dya = 6*mm, CsPbBr3_dyb = 6*mm;
-  G4double CsPbBr3_dz  = 2*mm;      
+  G4double CsPbBr3_dx = 2*mm;
+  G4double CsPbBr3_dy = 6*mm;
+  G4double CsPbBr3_dz = 6*mm;      
   G4Trd* solidShapeCsPbBr3 =    
     new G4Trd("ShapeCsPbBr3",                      //its name
-              0.5*CsPbBr3_dxa, 0.5*CsPbBr3_dxb, 
-              0.5*CsPbBr3_dya, 0.5*CsPbBr3_dyb, 0.5*CsPbBr3_dz); //its size
+              0.5*CsPbBr3_dx, 0.5*CsPbBr3_dx, 
+              0.5*CsPbBr3_dy, 0.5*CsPbBr3_dy, CsPbBr3_dz); //its size
   
   // Detector #1
   G4ThreeVector pos1 = G4ThreeVector(0*cm, 0*cm, 3*cm);
-  G4LogicalVolume* logicShapeMAPbI3_1 =                         
-    new G4LogicalVolume(solidShapeMAPbI3,         //its solid
-                        MAPbI3,          //its material
-                        "ShapeMAPbI3_1");           //its name
-  new G4PVPlacement(0,                       //no rotation
+  G4RotationMatrix* rm1 = new G4RotationMatrix(); 
+  rm1->rotateY(0.*deg); 
+  G4LogicalVolume* logicShapeMAPbBr3_1 =                         
+    new G4LogicalVolume(solidShapeMAPbBr3,         //its solid
+                        MAPbBr3,          //its material
+                        "ShapeMAPbBr3_1");           //its name
+  new G4PVPlacement(rm1,                       //no rotation
                     pos1,                    //at position
-                    logicShapeMAPbI3_1,             //its logical volume
-                    "ShapeMAPbI3_1",                //its name
+                    logicShapeMAPbBr3_1,             //its logical volume
+                    "ShapeMAPbBr3_1",                //its name
                     logicEnv,                //its mother  volume
                     false,                   //no boolean operation
                     0,                       //copy number
                     checkOverlaps);          //overlaps checking
   
-  fScoringVolume = logicShapeMAPbI3_1;
-  
   // Detector #2
   G4ThreeVector pos2 = G4ThreeVector(0*cm, 0*cm, -3*cm);
-  G4LogicalVolume* logicShapeCsPbBr3_2 =                         
-    new G4LogicalVolume(solidShapeCsPbBr3,         //its solid
-                        CsPbBr3,          //its material
-                        "ShapeCsPbBr3_2");           //its name
-  new G4PVPlacement(0,                       //no rotation
+  G4RotationMatrix* rm2 = new G4RotationMatrix(); 
+  rm2->rotateY(180.*deg); 
+  G4LogicalVolume* logicShapeMAPbBr3_2 =                         
+    new G4LogicalVolume(solidShapeMAPbBr3,         //its solid
+                        MAPbBr3,          //its material
+                        "ShapeMAPbBr3_2");           //its name
+  new G4PVPlacement(rm2,                       //no rotation
                     pos2,                    //at position
-                    logicShapeCsPbBr3_2,             //its logical volume
-                    "ShapeCsPbBr3_2",                //its name
+                    logicShapeMAPbBr3_2,             //its logical volume
+                    "ShapeMAPbBr3_2",                //its name
+                    logicEnv,                //its mother  volume
+                    false,                   //no boolean operation
+                    0,                       //copy number
+                    checkOverlaps);          //overlaps checking
+  
+  // Detector #3
+  G4ThreeVector pos3 = G4ThreeVector(-3/1.414*cm, 0*cm, 3/1.414*cm);
+  G4RotationMatrix* rm3 = new G4RotationMatrix(); 
+  rm3->rotateY(45.*deg); 
+  G4LogicalVolume* logicShapeMAPbBr3_3 =                         
+    new G4LogicalVolume(solidShapeMAPbBr3,         //its solid
+                        MAPbBr3,          //its material
+                        "ShapeMAPbBr3_3");           //its name
+  new G4PVPlacement(rm3,                       //no rotation
+                    pos3,                    //at position
+                    logicShapeMAPbBr3_3,             //its logical volume
+                    "ShapeMAPbBr3_3",                //its name
+                    logicEnv,                //its mother  volume
+                    false,                   //no boolean operation
+                    0,                       //copy number
+                    checkOverlaps);          //overlaps checking
+  
+  // Detector #4
+  G4ThreeVector pos4 = G4ThreeVector(-3*cm, 0*cm, 0*cm);
+  G4RotationMatrix* rm4 = new G4RotationMatrix(); 
+  rm4->rotateY(90.*deg); 
+  G4LogicalVolume* logicShapeMAPbBr3_4 =                         
+    new G4LogicalVolume(solidShapeMAPbBr3,         //its solid
+                        MAPbBr3,          //its material
+                        "ShapeMAPbBr3_4");           //its name
+  new G4PVPlacement(rm4,                       //no rotation
+                    pos4,                    //at position
+                    logicShapeMAPbBr3_4,             //its logical volume
+                    "ShapeMAPbBr3_4",                //its name
+                    logicEnv,                //its mother  volume
+                    false,                   //no boolean operation
+                    0,                       //copy number
+                    checkOverlaps);          //overlaps checking
+  
+  // Detector #5
+  G4ThreeVector pos5 = G4ThreeVector(-3/1.414*cm, 0*cm, -3/1.414*cm);
+  G4RotationMatrix* rm5 = new G4RotationMatrix(); 
+  rm5->rotateY(135.*deg); 
+  G4LogicalVolume* logicShapeMAPbBr3_5 =                         
+    new G4LogicalVolume(solidShapeMAPbBr3,         //its solid
+                        MAPbBr3,          //its material
+                        "ShapeMAPbBr3_5");           //its name
+  new G4PVPlacement(rm5,                       //no rotation
+                    pos5,                    //at position
+                    logicShapeMAPbBr3_5,             //its logical volume
+                    "ShapeMAPbBr3_5",                //its name
+                    logicEnv,                //its mother  volume
+                    false,                   //no boolean operation
+                    0,                       //copy number
+                    checkOverlaps);          //overlaps checking
+  
+  // Detector #6
+  G4ThreeVector pos6 = G4ThreeVector(3/1.414*cm, 0*cm, -3/1.414*cm);
+  G4RotationMatrix* rm6 = new G4RotationMatrix(); 
+  rm6->rotateY(225.*deg); 
+  G4LogicalVolume* logicShapeMAPbBr3_6 =                         
+    new G4LogicalVolume(solidShapeMAPbBr3,         //its solid
+                        MAPbBr3,          //its material
+                        "ShapeMAPbBr3_6");           //its name
+  new G4PVPlacement(rm6,                       //no rotation
+                    pos6,                    //at position
+                    logicShapeMAPbBr3_6,             //its logical volume
+                    "ShapeMAPbBr3_6",                //its name
+                    logicEnv,                //its mother  volume
+                    false,                   //no boolean operation
+                    0,                       //copy number
+                    checkOverlaps);          //overlaps checking
+  
+  // Detector #7
+  G4ThreeVector pos7 = G4ThreeVector(3*cm, 0*cm, 0*cm);
+  G4RotationMatrix* rm7 = new G4RotationMatrix(); 
+  rm7->rotateY(270.*deg); 
+  G4LogicalVolume* logicShapeMAPbBr3_7 =                         
+    new G4LogicalVolume(solidShapeMAPbBr3,         //its solid
+                        MAPbBr3,          //its material
+                        "ShapeMAPbBr3_7");           //its name
+  new G4PVPlacement(rm7,                       //no rotation
+                    pos7,                    //at position
+                    logicShapeMAPbBr3_7,             //its logical volume
+                    "ShapeMAPbBr3_7",                //its name
+                    logicEnv,                //its mother  volume
+                    false,                   //no boolean operation
+                    0,                       //copy number
+                    checkOverlaps);          //overlaps checking
+  
+  // Detector #8
+  G4ThreeVector pos8 = G4ThreeVector(3/1.414*cm, 0*cm, 3/1.414*cm);
+  G4RotationMatrix* rm8 = new G4RotationMatrix(); 
+  rm8->rotateY(315.*deg); 
+  G4LogicalVolume* logicShapeMAPbBr3_8 =                         
+    new G4LogicalVolume(solidShapeMAPbBr3,         //its solid
+                        MAPbBr3,          //its material
+                        "ShapeMAPbBr3_8");           //its name
+  new G4PVPlacement(rm8,                       //no rotation
+                    pos8,                    //at position
+                    logicShapeMAPbBr3_8,             //its logical volume
+                    "ShapeMAPbBr3_8",                //its name
                     logicEnv,                //its mother  volume
                     false,                   //no boolean operation
                     0,                       //copy number
                     checkOverlaps);          //overlaps checking
   
   //fScoringVolume = logicShapeMAPbI3_1;
+  fScoringVolume = logicShapeMAPbBr3_1;
 
   //
   //always return the physical World
@@ -220,11 +341,11 @@ void PvskDetectorConstruction::ConstructSDandField()
   auto perovskiteSD_1
     = new PvskSD("PvskSD_1", "PvskHitsCollection_1", 1);
   G4SDManager::GetSDMpointer()->AddNewDetector(perovskiteSD_1);
-  SetSensitiveDetector("ShapeMAPbI3_1",perovskiteSD_1);
+  SetSensitiveDetector("ShapeMAPbBr3_1",perovskiteSD_1);
   auto perovskiteSD_2
     = new PvskSD("PvskSD_2", "PvskHitsCollection_2", 1);
   G4SDManager::GetSDMpointer()->AddNewDetector(perovskiteSD_2);
-  SetSensitiveDetector("ShapeCsPbBr3_2",perovskiteSD_2);
+  SetSensitiveDetector("ShapeMAPbBr3_2",perovskiteSD_2);
 
 }
 

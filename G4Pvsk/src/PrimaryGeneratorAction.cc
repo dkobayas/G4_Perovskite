@@ -70,7 +70,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
   //fParticleGun_2->SetParticleEnergy(0.511*MeV);
 
   for( G4int idiv=0; idiv<nCo60_division; idiv++ ) {
-    G4double theta = CLHEP::pi * (G4double)idiv/(G4double)nCo60_division;
+    G4double theta = CLHEP::twopi * (G4double)idiv/(G4double)nCo60_division;
     fCo60_integral += 1. 
                        + 0.1020 * ( 3 * cos(theta) * cos(theta) )/2.
                        + 0.00907 * (35 * pow( cos(theta), 4 ) - 30 * cos(theta) * cos(theta) + 3 )/8.;
@@ -141,17 +141,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   
   // Co 60
   // gamma #1
-  //G4double theta0 = CLHEP::pi * G4UniformRand();
-  G4double theta0 = CLHEP::pi * 30./180. * G4UniformRand();
-  G4double phi0   = CLHEP::twopi * G4UniformRand();
-  G4ThreeVector firstBeam = G4ThreeVector( sin(theta0) * cos(phi0), sin(theta0) * sin(phi0), cos(theta0) );
-  //G4ThreeVector firstBeam = G4ThreeVector( 0, 0, 1 ); 
-  fParticleGun_1->SetParticleMomentumDirection( firstBeam );
-  //fParticleGun_1->SetParticleEnergy(1.333*MeV);
-  //fParticleGun_1->SetParticleEnergy(0.511*MeV);
-  fParticleGun_1->SetParticleEnergy(511*keV);
-  fParticleGun_1->SetParticlePosition(G4ThreeVector(x0,y0,z0));
-  fParticleGun_1->GeneratePrimaryVertex(anEvent);
+  //G4ThreeVector firstBeam = G4ThreeVector( sin(theta0) * cos(phi0), sin(theta0) * sin(phi0), cos(theta0) );
+  G4ThreeVector firstBeam = G4ThreeVector( 0, 0, 1 ); 
   
   // gamma #2
   //G4double theta = 3.14*180./180. + 3.14*1./180. * (G4UniformRand()-0.5);
@@ -159,25 +150,35 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double theta = G4UniformRand();
   for( G4int idiv=0; idiv<nCo60_division; idiv++ ) {
     if( (G4double)fCo60_dist[idiv]/(G4double)fCo60_integral > theta ) {
-      theta = CLHEP::pi * (G4double)idiv/(G4double)nCo60_division;
+      theta = CLHEP::twopi * (G4double)idiv/(G4double)nCo60_division;
       break;
     } else if( idiv == nCo60_division-1 ) {
       theta = -1;
       G4cout << "Warning: angle is not assigned for gamma-rays properly, then it is set as 0." << G4endl;
     }
   }
-  theta = CLHEP::pi;
-  G4double phi   = CLHEP::twopi * G4UniformRand();
-  G4ThreeVector cross = ( fabs(cos(theta0))==1. )? firstBeam.cross( G4ThreeVector(1,0,0) ):firstBeam.cross( G4ThreeVector(0,0,1) );
   G4ThreeVector secondBeam = firstBeam;
-  if( fabs(cos(theta))==1. ) secondBeam.rotate( theta, cross );
-  else (secondBeam.rotate( theta, cross )).rotate( phi, firstBeam );
+  secondBeam.rotate( theta, G4ThreeVector(0,1,0) );
+
+  G4double phi0   = CLHEP::twopi * G4UniformRand();
+  firstBeam.rotate( phi0, G4ThreeVector(0,1,0) );
+  secondBeam.rotate( phi0, G4ThreeVector(0,1,0) );
+
+  
+  //G4double theta1 = CLHEP::pi * (30./180. * G4UniformRand() - 15./180);
+  //G4double phi1   = CLHEP::twopi * G4UniformRand();
+  //G4ThreeVector cross = ( fabs(cos(theta0))==1. )? firstBeam.cross( G4ThreeVector(1,0,0) ):firstBeam.cross( G4ThreeVector(0,0,1) );
+  //if( fabs(cos(theta))==1. ) secondBeam.rotate( theta, cross );
+  //else (secondBeam.rotate( theta, cross )).rotate( phi, firstBeam );
   //G4ThreeVector secondBeam = G4ThreeVector(0,0,-1);
   //G4cout << "angle: " << secondBeam.angle( firstBeam ) << G4endl;
 
+  fParticleGun_1->SetParticleMomentumDirection( firstBeam );
+  fParticleGun_1->SetParticleEnergy(1.333*MeV);
+  fParticleGun_1->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+  fParticleGun_1->GeneratePrimaryVertex(anEvent);
   fParticleGun_2->SetParticleMomentumDirection( secondBeam );
-  //fParticleGun_2->SetParticleEnergy(1.173*MeV);
-  fParticleGun_2->SetParticleEnergy(57*keV);
+  fParticleGun_2->SetParticleEnergy(1.173*MeV);
   fParticleGun_2->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   fParticleGun_2->GeneratePrimaryVertex(anEvent);
 }
