@@ -135,9 +135,9 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
   a = 207.2*g/mole;
   G4Element* elPb = new G4Element("Lead"    ,"Pb", 82., a);
   a = 132.9*g/mole;
-  G4Element* elCs = new G4Element("Cs"    ,"Cs", 55., a);
+  //G4Element* elCs = new G4Element("Cs"    ,"Cs", 55., a);
   a = 126.9*g/mole;
-  G4Element* elI  = new G4Element("I", "I" , 53., a);
+  //G4Element* elI  = new G4Element("I", "I" , 53., a);
   a = 79.9*g/mole;
   G4Element* elBr  = new G4Element("Br", "Br" , 35., a);
   //G4double density = 16.3*g/cm3;
@@ -146,6 +146,7 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
   // 1 single cristal
   //
   // MAPbI3
+  /*
   G4Material* MAPbI3 = new G4Material("MAPbI3", density, 5);
   MAPbI3->AddElement(elC , 1);
   MAPbI3->AddElement(elH , 6);
@@ -159,7 +160,9 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
     new G4Trd("ShapeMAPbI3",                      //its name
               0.5*MAPbI3_dx, 0.5*MAPbI3_dx, 
               0.5*MAPbI3_dy, 0.5*MAPbI3_dy, MAPbI3_dz); //its size
+  */
   // MAPbI3
+  ///*
   G4Material* MAPbBr3 = new G4Material("MAPbBr3", density, 5);
   MAPbBr3->AddElement(elC , 1);
   MAPbBr3->AddElement(elH , 6);
@@ -173,7 +176,9 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
     new G4Trd("ShapeMAPbBr3",                      //its name
               0.5*MAPbBr3_dx, 0.5*MAPbBr3_dx, 
               0.5*MAPbBr3_dy, 0.5*MAPbBr3_dy, MAPbBr3_dz); //its size
+  //*/
   // CsPbBr3
+  /*
   G4Material* CsPbBr3 = new G4Material("CsPbBr3", density, 3);
   CsPbBr3->AddElement(elCs, 1);
   CsPbBr3->AddElement(elPb, 1);
@@ -185,9 +190,10 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
     new G4Trd("ShapeCsPbBr3",                      //its name
               0.5*CsPbBr3_dx, 0.5*CsPbBr3_dx, 
               0.5*CsPbBr3_dy, 0.5*CsPbBr3_dy, CsPbBr3_dz); //its size
-  
+  */
+  G4double r_det = 3.0/2.0;
   // Detector #1
-  G4ThreeVector pos1 = G4ThreeVector(0*cm, 0*cm, 3*cm);
+  G4ThreeVector pos1 = G4ThreeVector(0*cm, 0*cm, r_det*cm);
   G4RotationMatrix* rm1 = new G4RotationMatrix(); 
   rm1->rotateY(0.*deg); 
   G4LogicalVolume* logicShapeMAPbBr3_1 =                         
@@ -204,9 +210,9 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
                     checkOverlaps);          //overlaps checking
   
   // Detector #2
-  G4ThreeVector pos2 = G4ThreeVector(0*cm, 0*cm, -3*cm);
+  G4ThreeVector pos2 = G4ThreeVector(-r_det/1.414*cm, 0*cm, r_det/1.414*cm);
   G4RotationMatrix* rm2 = new G4RotationMatrix(); 
-  rm2->rotateY(180.*deg); 
+  rm2->rotateY(45.*deg); 
   G4LogicalVolume* logicShapeMAPbBr3_2 =                         
     new G4LogicalVolume(solidShapeMAPbBr3,         //its solid
                         MAPbBr3,          //its material
@@ -221,9 +227,9 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
                     checkOverlaps);          //overlaps checking
   
   // Detector #3
-  G4ThreeVector pos3 = G4ThreeVector(-3/1.414*cm, 0*cm, 3/1.414*cm);
+  G4ThreeVector pos3 = G4ThreeVector(-r_det*cm, 0*cm, 0*cm);
   G4RotationMatrix* rm3 = new G4RotationMatrix(); 
-  rm3->rotateY(45.*deg); 
+  rm3->rotateY(90.*deg); 
   G4LogicalVolume* logicShapeMAPbBr3_3 =                         
     new G4LogicalVolume(solidShapeMAPbBr3,         //its solid
                         MAPbBr3,          //its material
@@ -238,9 +244,9 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
                     checkOverlaps);          //overlaps checking
   
   // Detector #4
-  G4ThreeVector pos4 = G4ThreeVector(-3*cm, 0*cm, 0*cm);
+  G4ThreeVector pos4 = G4ThreeVector(-r_det/1.414*cm, 0*cm, -r_det/1.414*cm);
   G4RotationMatrix* rm4 = new G4RotationMatrix(); 
-  rm4->rotateY(90.*deg); 
+  rm4->rotateY(135.*deg); 
   G4LogicalVolume* logicShapeMAPbBr3_4 =                         
     new G4LogicalVolume(solidShapeMAPbBr3,         //its solid
                         MAPbBr3,          //its material
@@ -255,9 +261,9 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
                     checkOverlaps);          //overlaps checking
   
   // Detector #5
-  G4ThreeVector pos5 = G4ThreeVector(-3/1.414*cm, 0*cm, -3/1.414*cm);
+  G4ThreeVector pos5 = G4ThreeVector(0*cm, 0*cm, -r_det*cm);
   G4RotationMatrix* rm5 = new G4RotationMatrix(); 
-  rm5->rotateY(135.*deg); 
+  rm5->rotateY(180.*deg); 
   G4LogicalVolume* logicShapeMAPbBr3_5 =                         
     new G4LogicalVolume(solidShapeMAPbBr3,         //its solid
                         MAPbBr3,          //its material
@@ -272,7 +278,7 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
                     checkOverlaps);          //overlaps checking
   
   // Detector #6
-  G4ThreeVector pos6 = G4ThreeVector(3/1.414*cm, 0*cm, -3/1.414*cm);
+  G4ThreeVector pos6 = G4ThreeVector(r_det/1.414*cm, 0*cm, -r_det/1.414*cm);
   G4RotationMatrix* rm6 = new G4RotationMatrix(); 
   rm6->rotateY(225.*deg); 
   G4LogicalVolume* logicShapeMAPbBr3_6 =                         
@@ -289,7 +295,7 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
                     checkOverlaps);          //overlaps checking
   
   // Detector #7
-  G4ThreeVector pos7 = G4ThreeVector(3*cm, 0*cm, 0*cm);
+  G4ThreeVector pos7 = G4ThreeVector(r_det*cm, 0*cm, 0*cm);
   G4RotationMatrix* rm7 = new G4RotationMatrix(); 
   rm7->rotateY(270.*deg); 
   G4LogicalVolume* logicShapeMAPbBr3_7 =                         
@@ -306,7 +312,7 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
                     checkOverlaps);          //overlaps checking
   
   // Detector #8
-  G4ThreeVector pos8 = G4ThreeVector(3/1.414*cm, 0*cm, 3/1.414*cm);
+  G4ThreeVector pos8 = G4ThreeVector(r_det/1.414*cm, 0*cm, r_det/1.414*cm);
   G4RotationMatrix* rm8 = new G4RotationMatrix(); 
   rm8->rotateY(315.*deg); 
   G4LogicalVolume* logicShapeMAPbBr3_8 =                         
@@ -346,6 +352,30 @@ void PvskDetectorConstruction::ConstructSDandField()
     = new PvskSD("PvskSD_2", "PvskHitsCollection_2", 1);
   G4SDManager::GetSDMpointer()->AddNewDetector(perovskiteSD_2);
   SetSensitiveDetector("ShapeMAPbBr3_2",perovskiteSD_2);
+  auto perovskiteSD_3
+    = new PvskSD("PvskSD_3", "PvskHitsCollection_3", 1);
+  G4SDManager::GetSDMpointer()->AddNewDetector(perovskiteSD_3);
+  SetSensitiveDetector("ShapeMAPbBr3_3",perovskiteSD_3);
+  auto perovskiteSD_4
+    = new PvskSD("PvskSD_4", "PvskHitsCollection_4", 1);
+  G4SDManager::GetSDMpointer()->AddNewDetector(perovskiteSD_4);
+  SetSensitiveDetector("ShapeMAPbBr3_4",perovskiteSD_4);
+  auto perovskiteSD_5
+    = new PvskSD("PvskSD_5", "PvskHitsCollection_5", 1);
+  G4SDManager::GetSDMpointer()->AddNewDetector(perovskiteSD_5);
+  SetSensitiveDetector("ShapeMAPbBr3_5",perovskiteSD_5);
+  auto perovskiteSD_6
+    = new PvskSD("PvskSD_6", "PvskHitsCollection_6", 1);
+  G4SDManager::GetSDMpointer()->AddNewDetector(perovskiteSD_6);
+  SetSensitiveDetector("ShapeMAPbBr3_6",perovskiteSD_6);
+  auto perovskiteSD_7
+    = new PvskSD("PvskSD_7", "PvskHitsCollection_7", 1);
+  G4SDManager::GetSDMpointer()->AddNewDetector(perovskiteSD_7);
+  SetSensitiveDetector("ShapeMAPbBr3_7",perovskiteSD_7);
+  auto perovskiteSD_8
+    = new PvskSD("PvskSD_8", "PvskHitsCollection_8", 1);
+  G4SDManager::GetSDMpointer()->AddNewDetector(perovskiteSD_8);
+  SetSensitiveDetector("ShapeMAPbBr3_8",perovskiteSD_8);
 
 }
 

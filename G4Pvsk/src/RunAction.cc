@@ -88,9 +88,11 @@ RunAction::RunAction()
   // Creating histograms
   // 1D
   //G4double E_range[2] = { 0.*MeV , 1.5*MeV };
-  G4double E_range[2] = { 0.*keV , 1000*keV };
+  G4double E_range[2] = { 0.*keV , 1500*keV };
   //G4double D_range[2] = { -1.*mm , 10*mm };
   G4double D_range[2] = { -3.*mm , 3*mm };
+
+  analysisManager->CreateH1("ev_pass","ev_pass", 2, -0.5, 1.5);
   analysisManager->CreateH1("D1_gam_edep","D1_gam_edep", 150, E_range[0], E_range[1]);
   analysisManager->CreateH1("D1_eltrk_l","D1_eltrk_l", 150, 0., 0.3*mm);
   analysisManager->CreateH1("D1_gam_depth","D1_gam_depth", 110, D_range[0], D_range[1]);
@@ -115,6 +117,16 @@ RunAction::RunAction()
   // Creating ntuple
   //
   analysisManager->CreateNtuple("Perovskite", "D1 and D2");
+  
+  analysisManager->CreateNtupleDColumn("beam1_energy");
+  analysisManager->CreateNtupleDColumn("beam1_dirx");
+  analysisManager->CreateNtupleDColumn("beam1_diry");
+  analysisManager->CreateNtupleDColumn("beam1_dirz");
+  analysisManager->CreateNtupleDColumn("beam2_energy");
+  analysisManager->CreateNtupleDColumn("beam2_dirx");
+  analysisManager->CreateNtupleDColumn("beam2_diry");
+  analysisManager->CreateNtupleDColumn("beam2_dirz");
+  analysisManager->CreateNtupleDColumn("beam1_beam2_angle");
   
   analysisManager->CreateNtupleDColumn("D1_gam_edep");
   analysisManager->CreateNtupleDColumn("D1_gam_initX");
@@ -142,15 +154,57 @@ RunAction::RunAction()
   analysisManager->CreateNtupleDColumn("D2_eltrk_maxl");
   analysisManager->CreateNtupleDColumn("D2_eltrk_maxlz");
   
-  analysisManager->CreateNtupleDColumn("beam1_energy");
-  analysisManager->CreateNtupleDColumn("beam1_dirx");
-  analysisManager->CreateNtupleDColumn("beam1_diry");
-  analysisManager->CreateNtupleDColumn("beam1_dirz");
-  analysisManager->CreateNtupleDColumn("beam2_energy");
-  analysisManager->CreateNtupleDColumn("beam2_dirx");
-  analysisManager->CreateNtupleDColumn("beam2_diry");
-  analysisManager->CreateNtupleDColumn("beam2_dirz");
-  analysisManager->CreateNtupleDColumn("beam1_beam2_angle");
+  analysisManager->CreateNtupleDColumn("D3_gam_edep");
+  analysisManager->CreateNtupleDColumn("D3_gam_initX");
+  analysisManager->CreateNtupleDColumn("D3_gam_initY");
+  analysisManager->CreateNtupleDColumn("D3_gam_initZ");
+  analysisManager->CreateNtupleDColumn("D3_gam_diffX");
+  analysisManager->CreateNtupleDColumn("D3_gam_diffY");
+  analysisManager->CreateNtupleDColumn("D3_gam_depth");
+  analysisManager->CreateNtupleIColumn("D3_gam_ncompt");
+  analysisManager->CreateNtupleIColumn("D3_gam_nphot");
+  analysisManager->CreateNtupleDColumn("D3_eltrk_l");
+  analysisManager->CreateNtupleDColumn("D3_eltrk_maxl");
+  analysisManager->CreateNtupleDColumn("D3_eltrk_maxlz");
+  
+  analysisManager->CreateNtupleDColumn("D4_gam_edep");
+  analysisManager->CreateNtupleDColumn("D4_gam_initX");
+  analysisManager->CreateNtupleDColumn("D4_gam_initY");
+  analysisManager->CreateNtupleDColumn("D4_gam_initZ");
+  analysisManager->CreateNtupleDColumn("D4_gam_diffX");
+  analysisManager->CreateNtupleDColumn("D4_gam_diffY");
+  analysisManager->CreateNtupleDColumn("D4_gam_depth");
+  analysisManager->CreateNtupleIColumn("D4_gam_ncompt");
+  analysisManager->CreateNtupleIColumn("D4_gam_nphot");
+  analysisManager->CreateNtupleDColumn("D4_eltrk_l");
+  analysisManager->CreateNtupleDColumn("D4_eltrk_maxl");
+  analysisManager->CreateNtupleDColumn("D4_eltrk_maxlz");
+  
+  analysisManager->CreateNtupleDColumn("D5_gam_edep");
+  analysisManager->CreateNtupleDColumn("D5_gam_initX");
+  analysisManager->CreateNtupleDColumn("D5_gam_initY");
+  analysisManager->CreateNtupleDColumn("D5_gam_initZ");
+  analysisManager->CreateNtupleDColumn("D5_gam_diffX");
+  analysisManager->CreateNtupleDColumn("D5_gam_diffY");
+  analysisManager->CreateNtupleDColumn("D5_gam_depth");
+  analysisManager->CreateNtupleIColumn("D5_gam_ncompt");
+  analysisManager->CreateNtupleIColumn("D5_gam_nphot");
+  analysisManager->CreateNtupleDColumn("D5_eltrk_l");
+  analysisManager->CreateNtupleDColumn("D5_eltrk_maxl");
+  analysisManager->CreateNtupleDColumn("D5_eltrk_maxlz");
+  
+  analysisManager->CreateNtupleDColumn("D6_gam_edep");
+  analysisManager->CreateNtupleDColumn("D6_gam_initX");
+  analysisManager->CreateNtupleDColumn("D6_gam_initY");
+  analysisManager->CreateNtupleDColumn("D6_gam_initZ");
+  analysisManager->CreateNtupleDColumn("D6_gam_diffX");
+  analysisManager->CreateNtupleDColumn("D6_gam_diffY");
+  analysisManager->CreateNtupleDColumn("D6_gam_depth");
+  analysisManager->CreateNtupleIColumn("D6_gam_ncompt");
+  analysisManager->CreateNtupleIColumn("D6_gam_nphot");
+  analysisManager->CreateNtupleDColumn("D6_eltrk_l");
+  analysisManager->CreateNtupleDColumn("D6_eltrk_maxl");
+  analysisManager->CreateNtupleDColumn("D6_eltrk_maxlz");
   
   analysisManager->FinishNtuple();
 }

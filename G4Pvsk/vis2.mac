@@ -1,4 +1,6 @@
-/vis/open OGLIX
+#/vis/open OGL
+#/vis/open OGLIQt
+/vis/open OGL 600x600-0+0
 
 /vis/scene/create
 
@@ -28,4 +30,4 @@
 /gun/energy 57 keV
 #
 #/vis/viewer/flush
-/run/beamOn 10000
+/run/beamOn 100000

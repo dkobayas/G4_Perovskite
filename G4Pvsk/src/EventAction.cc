@@ -110,16 +110,46 @@ void EventAction::EndOfEventAction(const G4Event* event)
   //  fPerovskiteHCID 
   //    = G4SDManager::GetSDMpointer()->GetCollectionID("PvskHitsCollection_1");
   //}
-  fPerovskiteHCID = G4SDManager::GetSDMpointer()->GetCollectionID("PvskHitsCollection_1");
   // Get hits collections #1
+  fPerovskiteHCID = G4SDManager::GetSDMpointer()->GetCollectionID("PvskHitsCollection_1");
   auto PerovskiteHC_1 = GetHitsCollection(fPerovskiteHCID, event);
   auto PerovskiteHit_1 = (*PerovskiteHC_1)[0];
   
-  fPerovskiteHCID = G4SDManager::GetSDMpointer()->GetCollectionID("PvskHitsCollection_2");
   // Get hits collections #2
+  fPerovskiteHCID = G4SDManager::GetSDMpointer()->GetCollectionID("PvskHitsCollection_2");
   auto PerovskiteHC_2 = GetHitsCollection(fPerovskiteHCID, event);
   auto PerovskiteHit_2 = (*PerovskiteHC_2)[0];
 
+  // Get hits collections #3
+  fPerovskiteHCID = G4SDManager::GetSDMpointer()->GetCollectionID("PvskHitsCollection_3");
+  auto PerovskiteHC_3 = GetHitsCollection(fPerovskiteHCID, event);
+  auto PerovskiteHit_3 = (*PerovskiteHC_3)[0];
+
+  // Get hits collections #4
+  fPerovskiteHCID = G4SDManager::GetSDMpointer()->GetCollectionID("PvskHitsCollection_4");
+  auto PerovskiteHC_4 = GetHitsCollection(fPerovskiteHCID, event);
+  auto PerovskiteHit_4 = (*PerovskiteHC_4)[0];
+  
+  // Get hits collections #5
+  fPerovskiteHCID = G4SDManager::GetSDMpointer()->GetCollectionID("PvskHitsCollection_5");
+  auto PerovskiteHC_5 = GetHitsCollection(fPerovskiteHCID, event);
+  auto PerovskiteHit_5 = (*PerovskiteHC_5)[0];
+  
+  // Get hits collections #6
+  fPerovskiteHCID = G4SDManager::GetSDMpointer()->GetCollectionID("PvskHitsCollection_6");
+  auto PerovskiteHC_6 = GetHitsCollection(fPerovskiteHCID, event);
+  auto PerovskiteHit_6 = (*PerovskiteHC_6)[0];
+
+  // Get hits collections #7
+  fPerovskiteHCID = G4SDManager::GetSDMpointer()->GetCollectionID("PvskHitsCollection_7");
+  auto PerovskiteHC_7 = GetHitsCollection(fPerovskiteHCID, event);
+  auto PerovskiteHit_7 = (*PerovskiteHC_7)[0];
+  
+  // Get hits collections #8
+  fPerovskiteHCID = G4SDManager::GetSDMpointer()->GetCollectionID("PvskHitsCollection_8");
+  auto PerovskiteHC_8 = GetHitsCollection(fPerovskiteHCID, event);
+  auto PerovskiteHit_8 = (*PerovskiteHC_8)[0];
+  
   // Get hit with total values
   //auto PerovskiteHit = (*PerovskiteHC)[PerovskiteHC->entries()-1];
  
@@ -178,23 +208,37 @@ void EventAction::EndOfEventAction(const G4Event* event)
   
   fRunAction->AddEdep(fEdep);
   //if( PerovskiteHit_1->GetEdep() > 0 || PerovskiteHit_2->GetEdep() > 0 ) { 
-  if( true ) { 
+    
+  auto analysisManager = G4AnalysisManager::Instance();
+  analysisManager->FillH1(0, 0);
+  if( PerovskiteHit_1->GetEdep() > 0 
+      || PerovskiteHit_2->GetEdep() > 0
+      || PerovskiteHit_3->GetEdep() > 0
+      || PerovskiteHit_4->GetEdep() > 0
+      || PerovskiteHit_5->GetEdep() > 0
+      || PerovskiteHit_6->GetEdep() > 0
+      || PerovskiteHit_7->GetEdep() > 0
+      || PerovskiteHit_8->GetEdep() > 0
+    ) { 
 
     // get analysis manager
     ///*
-    auto analysisManager = G4AnalysisManager::Instance();
   
     // fill histograms
     // 1D
-    analysisManager->FillH1(0, PerovskiteHit_1->GetEdep());
-    analysisManager->FillH1(1, PerovskiteHit_1->GetTrackLength());
-    analysisManager->FillH1(2, PerovskiteHit_1->GetGammaThickness());
+
+    G4int ih1d = 0;
+    analysisManager->FillH1(ih1d, 1);ih1d++;
+    analysisManager->FillH1(ih1d, PerovskiteHit_1->GetEdep());ih1d++;
+    analysisManager->FillH1(ih1d, PerovskiteHit_1->GetTrackLength()); ih1d++;
+    analysisManager->FillH1(ih1d, PerovskiteHit_1->GetGammaThickness()); ih1d++;
     
-    analysisManager->FillH1(3, PerovskiteHit_2->GetEdep());
-    analysisManager->FillH1(4, PerovskiteHit_2->GetTrackLength());
-    analysisManager->FillH1(5, PerovskiteHit_2->GetGammaThickness());
+    analysisManager->FillH1(ih1d, PerovskiteHit_2->GetEdep());ih1d++;
+    analysisManager->FillH1(ih1d, PerovskiteHit_2->GetTrackLength());ih1d++;
+    analysisManager->FillH1(ih1d, PerovskiteHit_2->GetGammaThickness());ih1d++;
     
     // 2D
+    G4int ih2d = 0;
     analysisManager->FillH2(0, PerovskiteHit_1->GetGammaInX(), PerovskiteHit_1->GetGammaInY());
     analysisManager->FillH2(1, PerovskiteHit_1->GetGammaDiffX(), PerovskiteHit_1->GetGammaDiffY());
     analysisManager->FillH2(2, PerovskiteHit_1->GetEdep(), PerovskiteHit_1->GetGammaThickness());
@@ -208,41 +252,74 @@ void EventAction::EndOfEventAction(const G4Event* event)
     analysisManager->FillH2(8, PerovskiteHit_1->GetEdep(), PerovskiteHit_2->GetEdep() );
   
     // fill ntuple
-    analysisManager->FillNtupleDColumn(0, PerovskiteHit_1->GetEdep());
-    analysisManager->FillNtupleDColumn(1, PerovskiteHit_1->GetGammaInX());
-    analysisManager->FillNtupleDColumn(2, PerovskiteHit_1->GetGammaInY());
-    analysisManager->FillNtupleDColumn(3, PerovskiteHit_1->GetGammaInZ());
-    analysisManager->FillNtupleDColumn(4, PerovskiteHit_1->GetGammaDiffX());
-    analysisManager->FillNtupleDColumn(5, PerovskiteHit_1->GetGammaDiffY());
-    analysisManager->FillNtupleDColumn(6, PerovskiteHit_1->GetGammaThickness());
-    analysisManager->FillNtupleIColumn(7, PerovskiteHit_1->GetNCompt());
-    analysisManager->FillNtupleIColumn(8, PerovskiteHit_1->GetNPhot());
-    analysisManager->FillNtupleDColumn(9, PerovskiteHit_1->GetTrackLength());
-    analysisManager->FillNtupleDColumn(10, PerovskiteHit_1->GetEltrkMaxL());
-    analysisManager->FillNtupleDColumn(11, PerovskiteHit_1->GetEltrkMaxLz());
+    G4int it = 0;
+    analysisManager->FillNtupleDColumn(it, particleGun_1->GetParticleEnergy());it++;
+    analysisManager->FillNtupleDColumn(it, particleGun_1->GetParticleMomentumDirection().x());it++;
+    analysisManager->FillNtupleDColumn(it, particleGun_1->GetParticleMomentumDirection().y());it++;
+    analysisManager->FillNtupleDColumn(it, particleGun_1->GetParticleMomentumDirection().z());it++;
+    analysisManager->FillNtupleDColumn(it, particleGun_2->GetParticleEnergy());it++;
+    analysisManager->FillNtupleDColumn(it, particleGun_2->GetParticleMomentumDirection().x());it++;
+    analysisManager->FillNtupleDColumn(it, particleGun_2->GetParticleMomentumDirection().y());it++;
+    analysisManager->FillNtupleDColumn(it, particleGun_2->GetParticleMomentumDirection().z());it++;
+    analysisManager->FillNtupleDColumn(it, particleGun_2->GetParticleMomentumDirection().angle(particleGun_1->GetParticleMomentumDirection()));it++;
     
-    analysisManager->FillNtupleDColumn(12, PerovskiteHit_2->GetEdep());
-    analysisManager->FillNtupleDColumn(13, PerovskiteHit_2->GetGammaInX());
-    analysisManager->FillNtupleDColumn(14, PerovskiteHit_2->GetGammaInY());
-    analysisManager->FillNtupleDColumn(15, PerovskiteHit_2->GetGammaInZ());
-    analysisManager->FillNtupleDColumn(16, PerovskiteHit_2->GetGammaDiffX());
-    analysisManager->FillNtupleDColumn(17, PerovskiteHit_2->GetGammaDiffY());
-    analysisManager->FillNtupleDColumn(18, PerovskiteHit_2->GetGammaThickness());
-    analysisManager->FillNtupleIColumn(19, PerovskiteHit_2->GetNCompt());
-    analysisManager->FillNtupleIColumn(20, PerovskiteHit_2->GetNPhot());
-    analysisManager->FillNtupleDColumn(21, PerovskiteHit_2->GetTrackLength());
-    analysisManager->FillNtupleDColumn(22, PerovskiteHit_2->GetEltrkMaxL());
-    analysisManager->FillNtupleDColumn(23, PerovskiteHit_2->GetEltrkMaxLz());
+    G4double bg = 2.18;
+    G4double reso = 0.01;
+    //reso = sqrt(PerovskiteHit_1->GetEdep()*1e6/bg)/(PerovskiteHit_1->GetEdep()*1e6/bg); 
+    analysisManager->FillNtupleDColumn(it, G4RandGauss::shoot(PerovskiteHit_1->GetEdep(),PerovskiteHit_1->GetEdep()*reso));it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_1->GetGammaInX());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_1->GetGammaInY());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_1->GetGammaInZ());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_1->GetGammaDiffX());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_1->GetGammaDiffY());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_1->GetGammaThickness());it++;
+    analysisManager->FillNtupleIColumn(it, PerovskiteHit_1->GetNCompt());it++;
+    analysisManager->FillNtupleIColumn(it, PerovskiteHit_1->GetNPhot());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_1->GetTrackLength());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_1->GetEltrkMaxL());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_1->GetEltrkMaxLz());it++;
     
-    analysisManager->FillNtupleDColumn(24, particleGun_1->GetParticleEnergy());
-    analysisManager->FillNtupleDColumn(25, particleGun_1->GetParticleMomentumDirection().x());
-    analysisManager->FillNtupleDColumn(26, particleGun_1->GetParticleMomentumDirection().y());
-    analysisManager->FillNtupleDColumn(27, particleGun_1->GetParticleMomentumDirection().z());
-    analysisManager->FillNtupleDColumn(28, particleGun_2->GetParticleEnergy());
-    analysisManager->FillNtupleDColumn(29, particleGun_2->GetParticleMomentumDirection().x());
-    analysisManager->FillNtupleDColumn(30, particleGun_2->GetParticleMomentumDirection().y());
-    analysisManager->FillNtupleDColumn(31, particleGun_2->GetParticleMomentumDirection().z());
-    analysisManager->FillNtupleDColumn(32, particleGun_2->GetParticleMomentumDirection().angle(particleGun_1->GetParticleMomentumDirection()));
+    //reso = sqrt(PerovskiteHit_2->GetEdep()*1e6/bg)/(PerovskiteHit_2->GetEdep()*1e6/bg); 
+    analysisManager->FillNtupleDColumn(it, G4RandGauss::shoot(PerovskiteHit_2->GetEdep(),PerovskiteHit_2->GetEdep()*reso));it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_2->GetGammaInX());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_2->GetGammaInY());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_2->GetGammaInZ());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_2->GetGammaDiffX());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_2->GetGammaDiffY());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_2->GetGammaThickness());it++;
+    analysisManager->FillNtupleIColumn(it, PerovskiteHit_2->GetNCompt());it++;
+    analysisManager->FillNtupleIColumn(it, PerovskiteHit_2->GetNPhot());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_2->GetTrackLength());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_2->GetEltrkMaxL());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_2->GetEltrkMaxLz());it++;
+    
+    //reso = sqrt(PerovskiteHit_3->GetEdep()*1e6/bg)/(PerovskiteHit_3->GetEdep()*1e6/bg); 
+    analysisManager->FillNtupleDColumn(it, G4RandGauss::shoot(PerovskiteHit_3->GetEdep(),PerovskiteHit_3->GetEdep()*reso));it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_3->GetGammaInX());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_3->GetGammaInY());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_3->GetGammaInZ());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_3->GetGammaDiffX());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_3->GetGammaDiffY());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_3->GetGammaThickness());it++;
+    analysisManager->FillNtupleIColumn(it, PerovskiteHit_3->GetNCompt());it++;
+    analysisManager->FillNtupleIColumn(it, PerovskiteHit_3->GetNPhot());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_3->GetTrackLength());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_3->GetEltrkMaxL());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_3->GetEltrkMaxLz());it++;
+    
+    //reso = sqrt(PerovskiteHit_4->GetEdep()*1e6/bg)/(PerovskiteHit_4->GetEdep()*1e6/bg); 
+    analysisManager->FillNtupleDColumn(it, G4RandGauss::shoot(PerovskiteHit_4->GetEdep(),PerovskiteHit_4->GetEdep()*reso));it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_4->GetGammaInX());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_4->GetGammaInY());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_4->GetGammaInZ());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_4->GetGammaDiffX());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_4->GetGammaDiffY());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_4->GetGammaThickness());it++;
+    analysisManager->FillNtupleIColumn(it, PerovskiteHit_4->GetNCompt());it++;
+    analysisManager->FillNtupleIColumn(it, PerovskiteHit_4->GetNPhot());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_4->GetTrackLength());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_4->GetEltrkMaxL());it++;
+    analysisManager->FillNtupleDColumn(it, PerovskiteHit_4->GetEltrkMaxLz());it++;
     
     analysisManager->AddNtupleRow();  
     //*/
