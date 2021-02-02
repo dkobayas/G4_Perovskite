@@ -61,14 +61,14 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
 
   fParticleGun_1->SetParticleDefinition(particle);
   fParticleGun_1->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  fParticleGun_1->SetParticleEnergy(1.333*MeV);
-  //fParticleGun_1->SetParticleEnergy(0.511*MeV);
+  //fParticleGun_1->SetParticleEnergy(1.333*MeV);
+  fParticleGun_1->SetParticleEnergy(0.511*MeV);
   
   fParticleGun_2->SetParticleDefinition(particle);
   fParticleGun_2->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  fParticleGun_2->SetParticleEnergy(1.173*MeV);
-  //fParticleGun_2->SetParticleEnergy(0.511*MeV);
-
+  //fParticleGun_2->SetParticleEnergy(1.173*MeV);
+  fParticleGun_2->SetParticleEnergy(0.511*MeV);
+/*
   for( G4int idiv=0; idiv<nCo60_division; idiv++ ) {
     G4double theta = CLHEP::twopi * (G4double)idiv/(G4double)nCo60_division;
     fCo60_integral += 1. 
@@ -78,6 +78,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction()
     fCo60_dist[idiv] = fCo60_integral;
     G4cout << idiv << "-th bin: " << fCo60_dist[idiv] << "(integral: " << fCo60_integral << ")@" << theta << G4endl;
   }
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -139,13 +140,13 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double y0 = 0;
   G4double z0 = 0;
   
-  // Co 60
+  // Na 22
   // gamma #1
-  //G4ThreeVector firstBeam = G4ThreeVector( sin(theta0) * cos(phi0), sin(theta0) * sin(phi0), cos(theta0) );
-  G4ThreeVector firstBeam = G4ThreeVector( 0, 0, 1 ); 
+  G4double theta = CLHEP::twopi * G4UniformRand();
+  G4ThreeVector firstBeam = G4ThreeVector( sin(theta0) * cos(phi0), sin(theta0) * sin(phi0), cos(theta0) );
+  //G4ThreeVector firstBeam = G4ThreeVector( 0, 0, 1 ); 
   
   // gamma #2
-  //G4double theta = 3.14*180./180. + 3.14*1./180. * (G4UniformRand()-0.5);
   //G4double theta = CLHEP::pi*180./180.;
   G4double theta = G4UniformRand();
   for( G4int idiv=0; idiv<nCo60_division; idiv++ ) {
