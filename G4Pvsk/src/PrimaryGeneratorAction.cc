@@ -164,8 +164,14 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   firstBeam.rotate( phi0, G4ThreeVector(0,1,0) );
   secondBeam.rotate( phi0, G4ThreeVector(0,1,0) );
 
-  //G4double phi1   = CLHEP::twopi * G4UniformRand();
-  //G4double theta1 = CLHEP::pi * (G4UniformRand() - 0.5);
+  G4double phi1   = CLHEP::twopi * G4UniformRand();
+  G4double theta1 = CLHEP::pi * (G4UniformRand() - 0.5) * 30./180.;
+  G4ThreeVector plane_axis = G4ThreeVector( cos(phi1)*sin(theta1), cos(theta1), sin(phi1)*sin(theta1));
+  if( plane_axis != G4ThreeVector(0,1,0) ) {
+    G4ThreeVector cross = plane_axis.cross( G4ThreeVector(0,1,0) );
+    firstBeam.rotate( theta1, cross );
+    secondBeam.rotate( theta1, cross );
+  }
   
   //G4double theta1 = CLHEP::pi * (30./180. * G4UniformRand() - 15./180);
   //G4double phi1   = CLHEP::twopi * G4UniformRand();

@@ -191,7 +191,7 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
               0.5*CsPbBr3_dx, 0.5*CsPbBr3_dx, 
               0.5*CsPbBr3_dy, 0.5*CsPbBr3_dy, CsPbBr3_dz); //its size
   */
-  G4double r_det = 3.0/2.0;
+  G4double r_det = 2.5/2.0;
   // Detector #1
   G4ThreeVector pos1 = G4ThreeVector(0*cm, 0*cm, r_det*cm);
   G4RotationMatrix* rm1 = new G4RotationMatrix(); 
