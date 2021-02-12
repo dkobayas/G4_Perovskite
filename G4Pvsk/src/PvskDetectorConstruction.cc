@@ -31,6 +31,7 @@
 
 #include "PvskSD.hh"
 #include "G4SDManager.hh"
+#include "G4VisAttributes.hh"
 
 #include "G4RunManager.hh"
 #include "G4NistManager.hh"
@@ -39,6 +40,7 @@
 #include "G4Orb.hh"
 #include "G4Sphere.hh"
 #include "G4Trd.hh"
+#include "G4Colour.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4SystemOfUnits.hh"
@@ -175,7 +177,7 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
   G4Trd* solidShapeMAPbBr3 =    
     new G4Trd("ShapeMAPbBr3",                      //its name
               0.5*MAPbBr3_dx, 0.5*MAPbBr3_dx, 
-              0.5*MAPbBr3_dy, 0.5*MAPbBr3_dy, MAPbBr3_dz); //its size
+              0.5*MAPbBr3_dy, 0.5*MAPbBr3_dy, 0.5*MAPbBr3_dz); //its size
   //*/
   // CsPbBr3
   /*
@@ -200,6 +202,8 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
     new G4LogicalVolume(solidShapeMAPbBr3,         //its solid
                         MAPbBr3,          //its material
                         "ShapeMAPbBr3_1");           //its name
+  logicShapeMAPbBr3_1->SetVisAttributes( 
+    new G4VisAttributes(true, G4Colour(1., 0.3, 0.))); // orange
   new G4PVPlacement(rm1,                       //no rotation
                     pos1,                    //at position
                     logicShapeMAPbBr3_1,             //its logical volume
@@ -217,6 +221,7 @@ G4VPhysicalVolume* PvskDetectorConstruction::Construct()
     new G4LogicalVolume(solidShapeMAPbBr3,         //its solid
                         MAPbBr3,          //its material
                         "ShapeMAPbBr3_2");           //its name
+  
   new G4PVPlacement(rm2,                       //no rotation
                     pos2,                    //at position
                     logicShapeMAPbBr3_2,             //its logical volume

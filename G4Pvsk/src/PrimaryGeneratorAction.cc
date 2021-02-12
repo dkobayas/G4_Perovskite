@@ -141,53 +141,17 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4double z0 = 0;
   
   // Na 22
-  // gamma #1
-  G4double theta = CLHEP::twopi * G4UniformRand();
-  G4ThreeVector firstBeam = G4ThreeVector( sin(theta0) * cos(phi0), sin(theta0) * sin(phi0), cos(theta0) );
-  //G4ThreeVector firstBeam = G4ThreeVector( 0, 0, 1 ); 
-  
-  // gamma #2
-  //G4double theta = CLHEP::pi*180./180.;
-  G4double theta = G4UniformRand();
-  for( G4int idiv=0; idiv<nCo60_division; idiv++ ) {
-    if( (G4double)fCo60_dist[idiv]/(G4double)fCo60_integral > theta ) {
-      theta = CLHEP::twopi * (G4double)idiv/(G4double)nCo60_division;
-      break;
-    } else if( idiv == nCo60_division-1 ) {
-      theta = -1;
-      G4cout << "Warning: angle is not assigned for gamma-rays properly, then it is set as 0." << G4endl;
-    }
-  }
-  G4ThreeVector secondBeam = firstBeam;
-  secondBeam.rotate( theta, G4ThreeVector(0,1,0) );
-
   G4double phi0   = CLHEP::twopi * G4UniformRand();
-  firstBeam.rotate( phi0, G4ThreeVector(0,1,0) );
-  secondBeam.rotate( phi0, G4ThreeVector(0,1,0) );
-
-  G4double phi1   = CLHEP::twopi * G4UniformRand();
-  G4double theta1 = CLHEP::pi * (G4UniformRand() - 0.5) * 30./180.;
-  G4ThreeVector plane_axis = G4ThreeVector( cos(phi1)*sin(theta1), cos(theta1), sin(phi1)*sin(theta1));
-  if( plane_axis != G4ThreeVector(0,1,0) ) {
-    G4ThreeVector cross = plane_axis.cross( G4ThreeVector(0,1,0) );
-    firstBeam.rotate( theta1, cross );
-    secondBeam.rotate( theta1, cross );
-  }
+  G4double theta0 = CLHEP::pi * (G4UniformRand() - 0.5) * 30./180.;
+  G4ThreeVector firstBeam = G4ThreeVector( cos(theta0) * cos(phi0), sin(theta0), cos(theta0) * sin(phi0) );
+  G4ThreeVector secondBeam = G4ThreeVector( -cos(theta0) * cos(phi0), -sin(theta0), -cos(theta0) * sin(phi0) );
   
-  //G4double theta1 = CLHEP::pi * (30./180. * G4UniformRand() - 15./180);
-  //G4double phi1   = CLHEP::twopi * G4UniformRand();
-  //G4ThreeVector cross = ( fabs(cos(theta0))==1. )? firstBeam.cross( G4ThreeVector(1,0,0) ):firstBeam.cross( G4ThreeVector(0,0,1) );
-  //if( fabs(cos(theta))==1. ) secondBeam.rotate( theta, cross );
-  //else (secondBeam.rotate( theta, cross )).rotate( phi, firstBeam );
-  //G4ThreeVector secondBeam = G4ThreeVector(0,0,-1);
-  //G4cout << "angle: " << secondBeam.angle( firstBeam ) << G4endl;
-
   fParticleGun_1->SetParticleMomentumDirection( firstBeam );
-  fParticleGun_1->SetParticleEnergy(1.333*MeV);
+  fParticleGun_1->SetParticleEnergy(0.511*MeV);
   fParticleGun_1->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   fParticleGun_1->GeneratePrimaryVertex(anEvent);
   fParticleGun_2->SetParticleMomentumDirection( secondBeam );
-  fParticleGun_2->SetParticleEnergy(1.173*MeV);
+  fParticleGun_2->SetParticleEnergy(0.511*MeV);
   fParticleGun_2->SetParticlePosition(G4ThreeVector(x0,y0,z0));
   fParticleGun_2->GeneratePrimaryVertex(anEvent);
 }
