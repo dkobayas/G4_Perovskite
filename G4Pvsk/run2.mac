@@ -14,5 +14,5 @@
 /gun/particle gamma
 #/gun/energy 1.173 MeV
 #
-/run/printProgress 1000000
-/run/beamOn 10000000
+#/run/printProgress 1000000
+/run/beamOn 1000000
