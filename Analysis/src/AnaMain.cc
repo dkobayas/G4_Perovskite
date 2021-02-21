@@ -2,6 +2,8 @@
 
 #include <TFile.h>
 #include <TTree.h>
+#include <TMath.h>
+#include <TH2.h>
 
 #include "../include/Perovskite.h"
 #include "../include/HistManager.h"
@@ -14,6 +16,7 @@ int AnaMain( TString infname = "../Data/Perovskite_Co60.root"){
   Perovskite* t_pv = new Perovskite( intree );
   HistManager* hman = new HistManager();
   hman->Init();
+
   
   const int n_pv = t_pv->fChain->GetEntries();
   std::cout << "infile: " << infname << "(entry:" << n_pv << ")" << std::endl;
@@ -48,26 +51,30 @@ int AnaMain( TString infname = "../Data/Perovskite_Co60.root"){
 
     // hit matching with beam
     Double_t beam_rxz[2];
+    Double_t beam_cos[2];
     for(int i_beam=0; i_beam<2; i_beam++ ) {
       beam_rxz[i_beam] = (beam_z[i_beam]==0)? 1:beam_x[i_beam]/beam_z[i_beam];
+      beam_cos[i_beam] = beam_x[i_beam]/sqrt(pow(beam_x[i_beam],2)+pow(beam_z[i_beam],2));
     }
 
     Double_t Dhit_rxz[8];
+    Double_t Dhit_cos[8];
     Int_t Dhit_beam_sign[8][2];
     Bool_t Dhit_beam_match[8][2];
     std::vector<Int_t> hit_det;
     std::vector<Int_t> hit_det_high;
     for(int i_det=0; i_det<8; i_det++ ) {
-      if( Dhit_E[i_det] > 0.05 ) hit_det.push_back(i_det);
-      if( Dhit_E[i_det] > 0.1 ) hit_det_high.push_back(i_det);
+      if( Dhit_E[i_det] > 0.1 ) hit_det.push_back(i_det);
+      if( Dhit_E[i_det] > 0.5 ) hit_det_high.push_back(i_det);
       Dhit_rxz[i_det] = (Dhit_z[i_det]==0)? -100:Dhit_x[i_det]/Dhit_z[i_det];
+      Dhit_cos[i_det] = Dhit_x[i_det]/sqrt(pow(Dhit_x[i_det],2)+pow(Dhit_z[i_det],2));
       for(int i_beam=0; i_beam<2; i_beam++ ) {
         Dhit_beam_sign[i_det][i_beam] = (Dhit_x[i_det]*beam_x[i_beam]>0)? 1:-1;
         if( Dhit_x[i_det]*beam_x[i_beam]==0 ) {
           Dhit_beam_sign[i_det][i_beam] = (Dhit_z[i_det]*beam_z[i_beam]>0)? 1:-1;
         }
         Dhit_beam_match[i_det][i_beam] = ( Dhit_beam_sign[i_det][i_beam]==1 
-                                           && (beam_rxz[i_beam]-Dhit_rxz[i_det])<0.01
+                                           && fabs(beam_cos[i_beam]-Dhit_cos[i_det])<0.01
                                          );
       }
     }
@@ -81,38 +88,54 @@ int AnaMain( TString infname = "../Data/Perovskite_Co60.root"){
       //std::cout << "at " << i_pv << ": " << beam_rxz[0] << ", " << Dhit_rxz[0] << std::endl;
       std::vector<Int_t> opt(4,0);
       opt[0] = i_det; // i_det
+      // beam matching
       if( Dhit_beam_match[i_det][0] && Dhit_beam_match[i_det][1]) opt[2] = 3;
       else if( Dhit_beam_match[i_det][0] ) opt[2] = 1;
       else if( Dhit_beam_match[i_det][1] ) opt[2] = 2;
-      else opt[2] = 0;
+      else opt[2] = 4;
+      // p.e.
       if( Dhit_PE[i_det] > 0 ) opt[3] = 1; // p.e. flag
-      else opt[3] = 0;
+      else opt[3] = 2;
     
       opt[1] = 0; // energy
       hman->FillSingleDet( opt, Dhit_E[i_det]);
       // back to back
-      if( i_det>3 ) hman->h_Dhit_E_BB[i_det-4]->Fill(Dhit_E[i_det-4]);
-      else hman->h_Dhit_E_BB[i_det+4]->Fill(Dhit_E[i_det+4]);
+      //if( i_det>3 ) hman->h_Dhit_E_BB[i_det-4]->Fill(Dhit_E[i_det-4]);
+      //else hman->h_Dhit_E_BB[i_det+4]->Fill(Dhit_E[i_det+4]);
     }
 
     const Int_t n_hit_detH = hit_det_high.size();
-    if( n_hit_detH==2 ) {
-      Int_t comb = abs(hit_det_high[1]-hit_det_high[0])-1;
-      Double_t angle[7] = {45., 90., 135., 180., 225., 270., 315. };
-      Double_t weight[7] = {7., 6., 5., 4., 3., 2., 1. };
+    if( n_hit_detH>0 && n_hit_det==2 ) {
+      Int_t comb = abs(hit_det[1]-hit_det[0])-1;
+      Int_t comb_type = 0;
+      if( comb == 0 || comb == 6 ) comb_type = 0;
+      else if( comb == 1 || comb == 5 ) comb_type = 1;
+      else if( comb == 2 || comb == 4 ) comb_type = 2;
+      else if( comb == 3 ) comb_type = 3;
+      Double_t angle[7] = {TMath::Pi()*(1./4.), TMath::Pi()*(1./2.), TMath::Pi()*(3./4.), TMath::Pi(), 
+                           TMath::Pi()*(3./4.), TMath::Pi()*(1./2.), TMath::Pi()*(1./4.) };
+      Double_t weight[7] = {7.*2., 6.*2., 5.*2., 4., 3.*2., 2.*2., 1.*2. };
       hman->h_Dhit_angle->Fill(angle[comb],1./weight[comb]);
-      if( ( Dhit_beam_match[hit_det_high[0]][0] && Dhit_beam_match[hit_det_high[1]][1] ) 
-          || ( Dhit_beam_match[hit_det_high[0]][1] && Dhit_beam_match[hit_det_high[1]][0] )
+      hman->h_Dhit_Ecoin[comb_type]->Fill(Dhit_E[hit_det[0]],Dhit_E[hit_det[1]]);
+      if( ( Dhit_beam_match[hit_det[0]][0] && Dhit_beam_match[hit_det[1]][1] ) 
+          || ( Dhit_beam_match[hit_det[0]][1] && Dhit_beam_match[hit_det[1]][0] )
         ) {
         hman->h_Dhit_angle_mB12->Fill(angle[comb],1./weight[comb]);
+        hman->h_Dhit_Ecoin_mB12[comb_type]->Fill(Dhit_E[hit_det[0]],Dhit_E[hit_det[1]]);
+//        cout << beam_cos[0] << ", " << beam_cos[1] << ", " <<  Dhit_cos[hit_det_high[0]] << ", " << Dhit_cos[hit_det_high[1]]<< endl;
       } else {
         hman->h_Dhit_angle_mNO->Fill(angle[comb],1./weight[comb]);
+        hman->h_Dhit_Ecoin_mNO[comb_type]->Fill(Dhit_E[hit_det[0]],Dhit_E[hit_det[1]]);
       }
     }
   }
 
-  //hman->DrawSingleDet();
-  hman->h_Dhit_angle->Draw();
-  hman->h_Dhit_angle_mB12->Draw("same");
+  hman->DrawSingleDet( "E_pe", 0 );
+  hman->DrawSingleDet( "E_match", 1 );
+  hman->DrawSingleDet( "E_match_pe", 0 );
+  //hman->h_Dhit_angle->SetFillColor(kRed+2);
+  //hman->h_Dhit_angle->Draw("hist");
+  //hman->h_Dhit_angle_mB12->SetFillColor(kBlue+2);
+  //hman->h_Dhit_angle_mB12->Draw("hist,same");
   return 0;
 }

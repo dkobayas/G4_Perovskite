@@ -15,4 +15,4 @@
 #/gun/energy 1.173 MeV
 #
 #/run/printProgress 1000000
-/run/beamOn 5000000
+/run/beamOn 1000000

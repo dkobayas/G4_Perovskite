@@ -66,8 +66,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ParticleGun*  fParticleGun_2; // pointer a to G4 gun class
     G4GeneralParticleSource*  fParticleSource; // pointer a to G4 gun class
     G4Box* fEnvelopeBox;
-    const G4int nCo60_division = 100;
-    G4double fCo60_dist[100];
+    const G4int nCo60_division = 360;
+    G4double fCo60_dist[360];
     G4double fCo60_integral;
     
 };

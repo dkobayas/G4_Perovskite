@@ -157,6 +157,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       G4cout << "Warning: angle is not assigned for gamma-rays properly, then it is set as 0." << G4endl;
     }
   }
+  //theta = CLHEP::pi/2.0;
+  theta = (G4UniformRand()<0.5)? CLHEP::pi/4.0:CLHEP::pi*3.0/4.0;
   G4ThreeVector secondBeam = firstBeam;
   secondBeam.rotate( theta, G4ThreeVector(0,1,0) );
 
